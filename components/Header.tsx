@@ -26,11 +26,15 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   //const player = usePlayer();
   const router = useRouter();
+  const { push } = useRouter();
   const authModal = useAuthModal();
 
   const supabaseClient = useSupabaseClient();
   //console.log('supabaseClient :>> ', supabaseClient);
   const { user } = useUser();
+  if (user && user !== null) {
+    push("/");
+  }
   console.log('user :>> ', user);
 
   const handleLogout = async () => {

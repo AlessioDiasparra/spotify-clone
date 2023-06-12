@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, {useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { useSessionContext, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/app/supabaseClient";
 
 import useAuthModal from "@/hooks/useAuthModal";
 
@@ -15,12 +15,6 @@ const AuthModal = () => {
   const { session } = useSessionContext();
   const router = useRouter();
   const { onClose, isOpen } = useAuthModal();
-
-  //const supabaseClient = useSupabaseClient();
-  const PROJECT_URL = "https://tlfqqotfbddajkttcbqh.supabase.co";
-  const PROJECT_ANON_API_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZnFxb3RmYmRkYWprdHRjYnFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY1MDI5MDIsImV4cCI6MjAwMjA3ODkwMn0.V_z7z7g4qzxrCRr0PSixK68SG0hUVnfv3LEKmVZCNT4";
-  const supabase = createClient(PROJECT_URL, PROJECT_ANON_API_KEY);
 
   useEffect(() => {
     if (session) {
@@ -50,7 +44,7 @@ const AuthModal = () => {
         queryParams={{
           access_type: "offline",
           prompt: "consent",
-          hd: "tlfqqotfbddajkttcbqh.supabase.co"
+          hd: "localhost:3000"
         }}
         appearance={{
           theme: ThemeSupa,

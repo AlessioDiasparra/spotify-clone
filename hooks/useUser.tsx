@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext, useContext } from 'react';
+import { useEffect, useState, createContext, useContext, useCallback } from 'react';
 import {
   useUser as useSupaUser,
   useSessionContext,
@@ -23,53 +23,48 @@ export interface Props {
   [propName: string]: any;
 }
 
-// context provider utente
-export const UserContextProvider = (props: Props) => {
+export const MyUserContextProvider = (props: Props) => {
   const {
     session,
     isLoading: isLoadingUser,
-    supabaseClient
+    supabaseClient: supabase
   } = useSessionContext();
-  //prendi utente da supabase
   const user = useSupaUser();
   const accessToken = session?.access_token ?? null;
   const [isLoadingData, setIsloadingData] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
-
-  //dettagli utente
-  const getUserDetails = () => supabaseClient.from('users').select('*').single();
-  //abbonamenti
-  const getSubscription = () =>
-    supabaseClient
-      .from('subscriptions')
-      .select('*, prices(*, products(*))')
-      .in('status', ['trialing', 'active']) //seleziona abbonamento
-      .single();
+ 
 
   useEffect(() => {
-    if (user && !isLoadingData && !userDetails && !subscription) {
-      setIsloadingData(true);
-      //Questa promessa restituita viene soddisfatta quando tutte le promesse dell'input si risolvono (incluso quando viene passato un iterabile vuoto)
-      Promise.allSettled([getUserDetails(), getSubscription()]).then(
-        (results) => {
-          const userDetailsPromise = results[0];
-          const subscriptionPromise = results[1];
+    const getUserDetails = () => supabase.from('users').select('*').single();
+    const getSubscription = () =>
+      supabase
+        .from('subscriptions')
+        .select('*, prices(*, products(*))')
+        .in('status', ['trialing', 'active'])
+        .single();
+      if (user && !isLoadingData && !userDetails && !subscription) {
+        setIsloadingData(true);
+        Promise.allSettled([getUserDetails(), getSubscription()]).then(
+          (results) => {
+            const userDetailsPromise = results[0];
+            const subscriptionPromise = results[1];
 
-          if (userDetailsPromise.status === 'fulfilled')
-            setUserDetails(userDetailsPromise.value.data as UserDetails);
+            if (userDetailsPromise.status === 'fulfilled')
+              setUserDetails(userDetailsPromise.value.data as UserDetails);
 
-          if (subscriptionPromise.status === 'fulfilled')
-            setSubscription(subscriptionPromise.value.data as Subscription);
+            if (subscriptionPromise.status === 'fulfilled')
+              setSubscription(subscriptionPromise.value.data as Subscription);
 
-          setIsloadingData(false);
-        }
-      );
-    } else if (!user && !isLoadingUser && !isLoadingData) {
-      setUserDetails(null);
-      setSubscription(null);
-    }
-  }, [user, isLoadingUser]);
+            setIsloadingData(false);
+          }
+        );
+      } else if (!user && !isLoadingUser && !isLoadingData) {
+        setUserDetails(null);
+        setSubscription(null);
+      }
+  }, []);
 
   const value = {
     accessToken,
@@ -82,11 +77,10 @@ export const UserContextProvider = (props: Props) => {
   return <UserContext.Provider value={value} {...props} />;
 };
 
-//hook utente
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error(`useUser must be used within a UserProvider.`);
+    throw new Error(`useUser must be used within a MyUserContextProvider.`);
   }
   return context;
 };

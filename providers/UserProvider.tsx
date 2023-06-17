@@ -1,11 +1,88 @@
 "use client";
-import { MyUserContextProvider } from "@/hooks/useUser";
 
 interface UserProviderProps {
   children: React.ReactNode;
 }
 
+import { useEffect, useState, createContext } from "react";
+import { useUser as useSupaUser, useSessionContext, User } from "@supabase/auth-helpers-react";
+import { UserDetails, Subscription } from "@/types";
+import { supabase } from "@/app/supabaseClient";
+
+type UserContextType = {
+  accessToken: string | null;
+  user: User | null;
+  userDetails: UserDetails | null;
+  isLoading: boolean;
+  subscription: Subscription | null;
+};
+
+export const UserContext = createContext<UserContextType | undefined>(undefined);
+
+export interface Props {
+  children: React.ReactNode;
+}
+
+function UserContextProvider(props: Props) {
+
+  const [user, setUser] = useState<UserContextType | undefined>(undefined);
+
+  const { session, isLoading: isLoadingUser } = useSessionContext();
+
+  const accessToken = session?.access_token ?? null;
+  const [isLoadingData, setIsloadingData] = useState(false);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+
+  //dettagli utente da supabase
+  const getUserDetails = () => supabase.from("users").select("*").single();
+  const getSubscription = () =>
+    supabase
+      .from("subscriptions")
+      .select("*, prices(*, products(*))")
+      .in("status", ["trialing", "active"])
+      .single();
+
+  useEffect(() => {
+    (async () =>{
+      const {data} = await supabase.auth.getUser();
+      console.log('data :>> ', data);
+      setUser(data?.user);
+    })()
+    if (user && !isLoadingData && !userDetails && !subscription) {
+      console.log('user :>> ', user);
+      setIsloadingData(true);
+      Promise.allSettled([getUserDetails(), getSubscription()]).then(results => {
+        const userDetailsPromise = results[0];
+        const subscriptionPromise = results[1];
+
+        if (userDetailsPromise.status === "fulfilled") {
+          setUserDetails(userDetailsPromise.value.data as UserDetails);
+        }
+
+        if (subscriptionPromise.status === "fulfilled") {
+          setSubscription(subscriptionPromise.value.data as Subscription);
+        }
+        setIsloadingData(false);
+      });
+    } else if (!user && !isLoadingUser && !isLoadingData) {
+      setUserDetails(null);
+      setSubscription(null);
+    }
+  }, []);
+
+  const value = {
+    accessToken,
+    user,
+    userDetails,
+    isLoading: isLoadingUser || isLoadingData,
+    subscription
+  };
+  
+  return <UserContext.Provider value={value} {...props} />;
+}
+
 const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  return <MyUserContextProvider>{children}</MyUserContextProvider>;
+  return <UserContextProvider>{children}</UserContextProvider>;
 };
 export default UserProvider;

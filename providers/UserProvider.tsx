@@ -25,7 +25,7 @@ export interface Props {
 
 function UserContextProvider(props: Props) {
 
-  const [user, setUser] = useState<UserContextType | undefined>(undefined);
+  const [user, setUser] = useState<User | null>(null);
 
   const { session, isLoading: isLoadingUser } = useSessionContext();
 
@@ -44,24 +44,25 @@ function UserContextProvider(props: Props) {
       .single();
 
   useEffect(() => {
+    //fetcha l'utente
     (async () =>{
       const {data} = await supabase.auth.getUser();
       console.log('data :>> ', data);
       setUser(data?.user);
-    })()
+    })();
+
     if (user && !isLoadingData && !userDetails && !subscription) {
-      console.log('user :>> ', user);
       setIsloadingData(true);
       Promise.allSettled([getUserDetails(), getSubscription()]).then(results => {
         const userDetailsPromise = results[0];
         const subscriptionPromise = results[1];
 
         if (userDetailsPromise.status === "fulfilled") {
-          setUserDetails(userDetailsPromise.value.data as UserDetails);
+          setUserDetails(userDetailsPromise.value.data as unknown as UserDetails);
         }
 
         if (subscriptionPromise.status === "fulfilled") {
-          setSubscription(subscriptionPromise.value.data as Subscription);
+          setSubscription(subscriptionPromise.value.data as unknown as Subscription);
         }
         setIsloadingData(false);
       });

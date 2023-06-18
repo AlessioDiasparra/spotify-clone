@@ -5,7 +5,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/app/supabaseClient";
+import { supabaseClient } from "@/app/supabaseClient";
 
 import useAuthModal from "@/hooks/useAuthModal";
 
@@ -39,7 +39,7 @@ const AuthModal = () => {
     >
       <Auth
         theme='dark'
-        supabaseClient={supabase}
+        supabaseClient={supabaseClient}
         providers={["google"]}
         queryParams={{
           access_type: "offline",

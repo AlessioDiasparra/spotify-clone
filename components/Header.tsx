@@ -8,7 +8,7 @@ import { FaUserAlt } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
-import { supabase } from "@/app/supabaseClient";
+import { supabaseClient } from "@/app/supabaseClient";
 
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
@@ -36,9 +36,10 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
   }
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabaseClient.auth.signOut();
     //player.reset();
     router.refresh();
+    window.location.reload();
 
     if (error) {
       toast.error(error?.message);
@@ -53,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         `
         h-fit 
         bg-gradient-to-b 
-        from-emerald-800 
+        from-purple-800 
         p-6
         `,
         className

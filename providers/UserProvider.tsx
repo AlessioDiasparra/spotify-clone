@@ -7,7 +7,7 @@ interface UserProviderProps {
 import { useEffect, useState, createContext } from "react";
 import { useUser as useSupaUser, useSessionContext, User } from "@supabase/auth-helpers-react";
 import { UserDetails, Subscription } from "@/types";
-import { supabase } from "@/app/supabaseClient";
+import { supabaseClient } from "@/app/supabaseClient";
 
 type UserContextType = {
   accessToken: string | null;
@@ -35,9 +35,9 @@ function UserContextProvider(props: Props) {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   //dettagli utente da supabase
-  const getUserDetails = () => supabase.from("users").select("*").single();
+  const getUserDetails = () => supabaseClient.from("users").select("*").single();
   const getSubscription = () =>
-    supabase
+  supabaseClient
       .from("subscriptions")
       .select("*, prices(*, products(*))")
       .in("status", ["trialing", "active"])
@@ -46,7 +46,7 @@ function UserContextProvider(props: Props) {
   useEffect(() => {
     //fetcha l'utente
     (async () =>{
-      const {data} = await supabase.auth.getUser();
+      const {data} = await supabaseClient.auth.getUser();
       console.log('data :>> ', data);
       setUser(data?.user);
     })();

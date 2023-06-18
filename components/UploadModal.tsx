@@ -2,11 +2,11 @@
 
 import uniqid from "uniqid";
 import React, { useState } from "react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
+import { supabaseClient } from "@/app/supabaseClient";
 import useUploadModal from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
 
@@ -18,7 +18,6 @@ const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const uploadModal = useUploadModal();
-  const supabaseClient = useSupabaseClient();
   const { user } = useUser();
   const router = useRouter();
 
@@ -64,7 +63,7 @@ const UploadModal = () => {
 
       if (songError) {
         setIsLoading(false);
-        return toast.error("Failed song upload");
+        return toast.error("Caricamento file mp3 fallito");
       }
 
       // Upload image
@@ -77,10 +76,9 @@ const UploadModal = () => {
 
       if (imageError) {
         setIsLoading(false);
-        return toast.error("Failed image upload");
+        return toast.error("Caricamento file fallito");
       }
 
-      // Create record
       const { error: supabaseError } = await supabaseClient.from("songs").insert({
         user_id: user.id,
         title: values.title,
@@ -95,11 +93,11 @@ const UploadModal = () => {
 
       router.refresh();
       setIsLoading(false);
-      toast.success("Song created!");
+      toast.success("Canzone aggiunta!");
       reset();
       uploadModal.onClose();
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("Qualcosa è andato storto");
     } finally {
       setIsLoading(false);
     }
@@ -107,8 +105,8 @@ const UploadModal = () => {
 
   return (
     <Modal
-      title='Add a song'
-      description='Upload an mp3 file'
+      title='Aggiungi una canzone'
+      description='Carica un file mp3'
       isOpen={uploadModal.isOpen}
       onChange={onChange}
     >
@@ -117,16 +115,16 @@ const UploadModal = () => {
           id='title'
           disabled={isLoading}
           {...register("title", { required: true })}
-          placeholder='Song title'
+          placeholder='Titolo canzone'
         />
         <Input
           id='author'
           disabled={isLoading}
           {...register("author", { required: true })}
-          placeholder='Song author'
+          placeholder='Autore canzone'
         />
         <div>
-          <div className='pb-1'>Select a song file</div>
+          <div className='pb-1'>Seleziona un file mp3</div>
           <Input
             placeholder='test'
             disabled={isLoading}
@@ -137,7 +135,7 @@ const UploadModal = () => {
           />
         </div>
         <div>
-          <div className='pb-1'>Select an image</div>
+          <div className='pb-1'>Seleziona un'immagine</div>
           <Input
             placeholder='test'
             disabled={isLoading}
@@ -148,7 +146,7 @@ const UploadModal = () => {
           />
         </div>
         <Button disabled={isLoading} type='submit'>
-          Create
+          Aggiungi
         </Button>
       </form>
     </Modal>

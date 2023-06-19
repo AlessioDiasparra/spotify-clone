@@ -5,9 +5,9 @@ interface UserProviderProps {
 }
 
 import { useEffect, useState, createContext } from "react";
-import { useUser as useSupaUser, useSessionContext, User } from "@supabase/auth-helpers-react";
+import { useSessionContext, User, useUser as useSupaUser } from "@supabase/auth-helpers-react";
 import { UserDetails, Subscription } from "@/types";
-import { supabaseClient } from "@/app/supabaseClient";
+//import { supabaseClient } from "@/app/supabaseClient";
 
 type UserContextType = {
   accessToken: string | null;
@@ -24,10 +24,7 @@ export interface Props {
 }
 
 function UserContextProvider(props: Props) {
-
-  const [user, setUser] = useState<User | null>(null);
-
-  const { session, isLoading: isLoadingUser } = useSessionContext();
+  const { session, isLoading: isLoadingUser, supabaseClient } = useSessionContext();
 
   const accessToken = session?.access_token ?? null;
   const [isLoadingData, setIsloadingData] = useState(false);
@@ -37,20 +34,15 @@ function UserContextProvider(props: Props) {
   //dettagli utente da supabase
   const getUserDetails = () => supabaseClient.from("users").select("*").single();
   const getSubscription = () =>
-  supabaseClient
+    supabaseClient
       .from("subscriptions")
       .select("*, prices(*, products(*))")
       .in("status", ["trialing", "active"])
       .single();
-
+      //hook utente supabase
+  const user = useSupaUser();
+  
   useEffect(() => {
-    //fetcha l'utente
-    (async () =>{
-      const {data} = await supabaseClient.auth.getUser();
-      console.log('data :>> ', data);
-      setUser(data?.user);
-    })();
-
     if (user && !isLoadingData && !userDetails && !subscription) {
       setIsloadingData(true);
       Promise.allSettled([getUserDetails(), getSubscription()]).then(results => {
@@ -79,7 +71,7 @@ function UserContextProvider(props: Props) {
     isLoading: isLoadingUser || isLoadingData,
     subscription
   };
-  
+
   return <UserContext.Provider value={value} {...props} />;
 }
 

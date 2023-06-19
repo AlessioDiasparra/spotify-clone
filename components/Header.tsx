@@ -3,12 +3,11 @@
 import { twMerge } from "tailwind-merge";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { useRouter } from "next/navigation";
-import { FaUserAlt } from "react-icons/fa";
-//import { useSupabaseClient } from "@supabase/auth-helpers-react";
+//import { FaUserAlt } from "react-icons/fa";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { toast } from "react-hot-toast";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
-import { supabaseClient } from "@/app/supabaseClient";
 
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
@@ -34,12 +33,12 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
   if (user && user !== undefined) {
     push("/");
   }
+  const supabaseClient = useSupabaseClient(); 
 
   const handleLogout = async () => {
     const { error } = await supabaseClient.auth.signOut();
     //player.reset();
     router.refresh();
-    window.location.reload();
 
     if (error) {
       toast.error(error?.message);

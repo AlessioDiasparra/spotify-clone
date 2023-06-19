@@ -6,7 +6,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-import { supabaseClient } from "@/app/supabaseClient";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import useUploadModal from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
 
@@ -38,7 +38,8 @@ const UploadModal = () => {
       uploadModal.onClose();
     }
   };
-
+  const supabaseClient = useSupabaseClient();
+  
   const onSubmit: SubmitHandler<FieldValues> = async values => {
     try {
       setIsLoading(true);

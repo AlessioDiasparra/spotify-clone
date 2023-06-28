@@ -18,8 +18,11 @@ const AuthModal = () => {
 
   useEffect(() => {
     if (session) {
-      router.refresh();
+      //dopo l'auth vai in home
+      router.push('/');
       onClose();
+      //refresh per dati utente
+      router.refresh();
     }
   }, [session, router, onClose]);
 

@@ -7,7 +7,6 @@ interface UserProviderProps {
 import { useEffect, useState, createContext } from "react";
 import { useSessionContext, User, useUser as useSupaUser } from "@supabase/auth-helpers-react";
 import { UserDetails, Subscription } from "@/types";
-//import { supabaseClient } from "@/app/supabaseClient";
 
 type UserContextType = {
   accessToken: string | null;
@@ -16,7 +15,7 @@ type UserContextType = {
   isLoading: boolean;
   subscription: Subscription | null;
 };
-
+//creo il context
 export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export interface Props {
@@ -39,7 +38,8 @@ function UserContextProvider(props: Props) {
       .select("*, prices(*, products(*))")
       .in("status", ["trialing", "active"])
       .single();
-      //hook utente supabase
+
+  //hook utente supabase
   const user = useSupaUser();
   
   useEffect(() => {

@@ -30,9 +30,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
 
  
   const { user } = useUser();
-  if (user && user !== undefined) {
-    push("/");
-  }
+ 
   const supabaseClient = useSupabaseClient(); 
 
   const handleLogout = async () => {
@@ -127,13 +125,13 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
           </button>
         </div>
         <div className='flex justify-between items-center gap-x-4'>
-          {user && user !== null ? (
+          {user ? (
             <div className='flex gap-x-4 items-center'>
               <Button onClick={handleLogout} className='bg-white px-6 py-2'>
                 Logout
               </Button>
               <button onClick={() => router.push("/account")}>
-                <UserAvatar src={user?.user_metadata?.avatar_url} />
+                <UserAvatar src={user.user_metadata.avatar_url} />
               </button>
             </div>
           ) : (

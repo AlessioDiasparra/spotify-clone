@@ -136,7 +136,7 @@ const UploadModal = () => {
           />
         </div>
         <div>
-          <div className='pb-1'>Seleziona un'immagine</div>
+          <div className='pb-1'>Seleziona un immagine</div>
           <Input
             placeholder='test'
             disabled={isLoading}

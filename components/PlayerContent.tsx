@@ -84,6 +84,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     }
   };
 
+  //attiva/disattiva volume
   const toggleMute = () => {
     if (volume === 0) {
       setVolume(1);

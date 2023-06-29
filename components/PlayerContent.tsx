@@ -34,6 +34,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     const currentIndex = player.ids.findIndex(id => id === player.activeId);
     const nextSong = player.ids[currentIndex + 1];
 
+    //se non ci sono brani successivi ritorna la playlist al primo
     if (!nextSong) {
       return player.setId(player.ids[0]);
     }

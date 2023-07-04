@@ -61,7 +61,7 @@ function UserContextProvider(props: Props) {
       setUserDetails(null);
       setSubscription(null);
     }
-  }, [setUserDetails, isLoadingData, isLoadingUser, subscription, user, userDetails, supabaseClient]);
+  }, [isLoadingData, isLoadingUser, subscription, supabaseClient, user, userDetails]);
 
   const value = {
     accessToken,

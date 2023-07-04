@@ -50,6 +50,7 @@ const AuthModal = () => {
           prompt: "consent",
           hd: "spotify-clone-omega-orpin.vercel.app"
         }}
+        onlyThirdPartyProviders={true}
         appearance={{
           theme: ThemeSupa,
           variables: {

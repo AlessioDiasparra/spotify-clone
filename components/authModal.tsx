@@ -48,7 +48,7 @@ const AuthModal = () => {
         queryParams={{
           access_type: "offline",
           prompt: "consent",
-          hd: "spotify-clone-omega-orpin.vercel.app"
+          hd: "spotify-clone-alessiodiasparra.vercel.app"
         }}
         onlyThirdPartyProviders={true}
         appearance={{

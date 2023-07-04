@@ -21,7 +21,7 @@ const SearchInput = () => {
     //input nei querystring
     const url = qs.stringifyUrl({
       url: "/search",
-      query
+      query: query
     });
 
     router.push(url);

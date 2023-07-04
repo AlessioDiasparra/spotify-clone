@@ -30,9 +30,9 @@ const Library: React.FC<LibraryProps> = ({
       return authModal.onOpen();
     }
     // TODO: verifica abbonamento subscription
-   /*  if (!subscription) {
+    if (!subscription) {
       return subscribeModal.onOpen();
-    } */
+    }
 
     return uploadModal.onOpen();
   };

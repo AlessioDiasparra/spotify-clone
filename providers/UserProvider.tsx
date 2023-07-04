@@ -30,19 +30,18 @@ function UserContextProvider(props: Props) {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  //dettagli utente da supabase
-  const getUserDetails = () => supabaseClient.from("users").select("*").single();
-  const getSubscription = () =>
-    supabaseClient
-      .from("subscriptions")
-      .select("*, prices(*, products(*))")
-      .in("status", ["trialing", "active"])
-      .single();
-
   //hook utente supabase
   const user = useSupaUser();
   
   useEffect(() => {
+    const getUserDetails = () => supabaseClient.from("users").select("*").single();
+    const getSubscription = () =>
+      supabaseClient
+        .from("subscriptions")
+        .select("*, prices(*, products(*))")
+        .in("status", ["trialing", "active"])
+        .single();
+
     if (user && !isLoadingData && !userDetails && !subscription) {
       setIsloadingData(true);
       Promise.allSettled([getUserDetails(), getSubscription()]).then(results => {
@@ -62,7 +61,7 @@ function UserContextProvider(props: Props) {
       setUserDetails(null);
       setSubscription(null);
     }
-  }, []);
+  }, [setUserDetails, isLoadingData, isLoadingUser, subscription, user, userDetails, supabaseClient]);
 
   const value = {
     accessToken,

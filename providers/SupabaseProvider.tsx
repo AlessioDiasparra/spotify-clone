@@ -9,9 +9,13 @@ interface SupabaseProviderProps {
 
 //client supabase nell'app
 const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
+  const PROJECT_URL = "https://tlfqqotfbddajkttcbqh.supabase.co";
+  const PROJECT_ANON_API_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsZnFxb3RmYmRkYWprdHRjYnFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY1MDI5MDIsImV4cCI6MjAwMjA3ODkwMn0.V_z7z7g4qzxrCRr0PSixK68SG0hUVnfv3LEKmVZCNT4";
+
   const supabaseClient = createClientComponentClient<Database>({
-    supabaseUrl: process.env.SUPABASE_URL,
-    supabaseKey: process.env.SUPABASE_ANON_KEY
+    supabaseUrl: PROJECT_URL,
+    supabaseKey: PROJECT_ANON_API_KEY
   });
   return (
     <SessionContextProvider supabaseClient={supabaseClient}>{children}</SessionContextProvider>

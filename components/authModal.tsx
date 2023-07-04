@@ -6,7 +6,6 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-
 import useAuthModal from "@/hooks/useAuthModal";
 
 import Modal from "./Modal";

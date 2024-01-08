@@ -42,7 +42,7 @@ function UserContextProvider(props: Props) {
         .in("status", ["trialing", "active"])
         .single();
 
-    if (user && !isLoadingData && !userDetails && !subscription) {
+   
       setIsloadingData(true);
       Promise.allSettled([getUserDetails(), getSubscription()]).then(results => {
         const userDetailsPromise = results[0];
@@ -57,11 +57,8 @@ function UserContextProvider(props: Props) {
         }
         setIsloadingData(false);
       });
-    } else if (!user && !isLoadingUser && !isLoadingData) {
-      setUserDetails(null);
-      setSubscription(null);
-    }
-  }, [isLoadingData, isLoadingUser, subscription, supabaseClient, user, userDetails]);
+  
+  }, [supabaseClient]);
 
   const value = {
     accessToken,

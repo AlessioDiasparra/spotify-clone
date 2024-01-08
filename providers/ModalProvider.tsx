@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 
-import Modal from "@/components/Modal";
 import AuthModal from "@/components/authModal";
 import UploadModal from "@/components/UploadModal";
 import SubscribeModal from "@/components/subscribeModal";

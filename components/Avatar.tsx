@@ -11,7 +11,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ src }) => {
         width: "30px",
         height: "30px",
         borderRadius: "100%",
-        "verticalAlign": "middle",
+        verticalAlign: "middle",
         overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",

@@ -4,7 +4,7 @@ export const getURL = () => {
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
     process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
-    "https://spotify-clone-omega-orpin.vercel.app";
+    "https://spotify-clone-lilac-phi.vercel.app";
   // per essere sicuro di includere `https://` quando non è localhost.
   url = url.includes("http") ? url : `https://${url}`;
   // essere sicuro di includere `/`.

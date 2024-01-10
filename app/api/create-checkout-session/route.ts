@@ -43,8 +43,8 @@ export async function POST(request: Request) {
         trial_from_plan: true,
         metadata
       },
-      success_url: `${window.location.host}/account`,
-      cancel_url: window.location.host
+      success_url: `${getURL}/account`,
+      cancel_url: getURL()
     });
 
     return NextResponse.json({ sessionId: session.id });

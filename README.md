@@ -1,6 +1,6 @@
 # SPOTIFY CLONE
 
-https://spotify-clone-omega-orpin.vercel.app/
+https://spotify-clone-lilac-phi.vercel.app
 
 Supabase Backend-as-a-Service
 Autenticazione con integrazione Google

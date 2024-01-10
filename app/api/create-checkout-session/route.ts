@@ -43,8 +43,8 @@ export async function POST(request: Request) {
         trial_from_plan: true,
         metadata
       },
-      success_url: `https://spotify-clone-omega-orpin.vercel.app/account`,
-      cancel_url: `https://spotify-clone-omega-orpin.vercel.app/`
+      success_url: `${window.location.host}/account`,
+      cancel_url: window.location.host
     });
 
     return NextResponse.json({ sessionId: session.id });
